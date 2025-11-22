@@ -38,43 +38,43 @@ enum layer_number {
 #define _KC_MHEN KC_INT5
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [_QWERTY] = LAYOUT(
+    [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
-       KC_ESC , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , KC_MINS,
+        KC_BSLS, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , XXXXXXX,
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-       KC_TAB , KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , KC_BSPC, KC_BSPC, KC_H   , KC_J    , KC_K   , KC_L    , KC_SCLN, KC_QUOT,
+   LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , KC_SCLN, LT(1,KC_QUOT),
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-       KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , KC_DEL , KC_DEL , KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, KC_RSFT,
+  SFT_T(KC_EQL), KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, LT(2,KC_MINS),
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
-                        KC_A_DEL, KC_G_EN, KC_L_SPC,KC_C_BS,                   KC_C_BS, KC_R_ENT, KC_G_JA, KC_A_DEL
+               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_TAB), LT(2,KC_TAB),     SFT_T(KC_BSPC), CTL_T(KC_SPC), ALT_T(_KC_HEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
-    [_RAISE] = LAYOUT(
+    [1] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
-       _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
+        QK_BOOT, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END , _______, QK_BOOT,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, _______,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, KC_F11 , KC_F12 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                         _______, _______, _______, _______,                   _______, _______, _______, QK_BOOT
+                    _______, _______, CTL_T(KC_SPC), SFT_T(KC_BSPC),     SFT_T(KC_DEL), _______, ALT_T(_KC_MHEN), _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
-    [_LOWER] = LAYOUT(
+    [2] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
-       _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
+        _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,    KC_9,   KC_10, _______,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        KC_TILD, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC, _______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______, KC_COLN, KC_DQUO,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        KC_PLUS, _______, KC_LPRN, KC_RPRN, KC_LBRC, KC_LCBR, _______, _______, KC_RCBR, KC_RBRC, KC_LABK, KC_RABK, KC_QUES, KC_UNDS,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                         QK_BOOT, _______, _______, _______,                   _______, _______, _______, _______
+                               _______, _______, _______, S(KC_TAB),     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
-    [_ADJUST] = LAYOUT(
+    [3] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                     ,--------+--------+--------+--------+--------+--------.
         _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
     //|--------+--------+--------+--------+--------+--------|                     |--------+--------+--------+--------+--------+--------|
@@ -97,28 +97,25 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 #endif
 
 static bool strong_hold_keycode(uint16_t keycode) {
-    switch (tap_hold_keycode) {
-    // L0 Left thumb cluster
-    /* case LGUI_T(KC_): */
+    switch (keycode) {
+    // L0 thumb cluster
     case ALT_T(KC_ESC):
-    case LCTL_T(KC_ENT):
-    case LSFT_T(KC_TAB):
-    // L0 Right thumb cluster
-    case RSFT_T(KC_BSPC):
-    case RCTL_T(KC_SPC):
+    case CTL_T(KC_ENT):
+    case SFT_T(KC_TAB):  case LT(2,KC_TAB):
+    case SFT_T(KC_BSPC): case LT(2,KC_BSPC):
+    case CTL_T(KC_SPC):
     case ALT_T(_KC_HEN):
-    case RGUI_T(KC_APP):
+    case GUI_T(KC_APP):
 
-    // L1 Left thumb cluster
-    /* case LGUI_T(KC_): */
-    /* case ALT_T(KC_): */
-    case LCTL_T(KC_SPC):
-    case LSFT_T(KC_BSPC):
-    // L1 Right thumb cluster
-    case RSFT_T(KC_DEL):
-    /* case RCTL_T(KC_): */
+    // L1 thumb cluster
+    case SFT_T(KC_DEL):  case LT(2,KC_DEL):
     case ALT_T(_KC_MHEN):
-    /* case RGUI_T(KC_): */
+
+     // pinkey
+    case LT(1,KC_BSLS):
+    case LT(1,KC_QUOT):
+    case SFT_T(KC_EQL):  case LT(2,KC_EQL):
+    case SFT_T(KC_MINS): case LT(2,KC_MINS):
         return true;
     default:
         return false;
@@ -127,8 +124,8 @@ static bool strong_hold_keycode(uint16_t keycode) {
 
 bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
  uint16_t other_keycode, keyrecord_t* other_record) {
-    if (strong_hold_keycode(tab_hold_key)) {
-        return true
+    if (strong_hold_keycode(tap_hold_keycode)) {
+        return true;
     }
 
     return get_chordal_hold_default(tap_hold_record, other_record);
