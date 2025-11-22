@@ -23,6 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KC_HEN KC_INT4
 #define KC_MHEN KC_INT5
 
+enum {
+    TD_ALT_HEN,
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
@@ -32,7 +36,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
   LT(2, KC_EQL), KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, SFT_T(KC_MINS),
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
-               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     LT(2,KC_BSPC), CTL_T(KC_SPC), (KC_HEN), GUI_T(KC_APP)
+               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     LT(2,KC_BSPC), CTL_T(KC_SPC), TD(TD_ALT_HEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
@@ -121,3 +125,30 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     return strong_hold_keycode(keycode);
 }
+
+
+void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *user_data) {
+    if (state->count > 1) {
+        register_code16(KC_HEN);
+    }
+}
+
+void tap_dance_alt_henkan_finished(tap_dance_state_t *state, void *user_data) {
+    // if TAPPING_TERM have passed or other key is pressed then held alt key
+    if (state->count == 1) {
+        register_code16(KC_LALT);
+    }
+}
+
+void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        unregister_code16(KC_LALT);
+    } else if (state->count > 1) {
+        unregister_code16(KC_HEN);
+    }
+}
+
+
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
+};
