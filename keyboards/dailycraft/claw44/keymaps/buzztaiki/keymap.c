@@ -96,31 +96,44 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 };
 #endif
 
-bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
-                      uint16_t other_keycode, keyrecord_t* other_record) {
+static bool strong_hold_keycode(uint16_t keycode) {
     switch (tap_hold_keycode) {
-    // Thumb keys chords are always modifier
+    // L0 Left thumb cluster
     /* case LGUI_T(KC_): */
     case ALT_T(KC_ESC):
     case LCTL_T(KC_ENT):
     case LSFT_T(KC_TAB):
+    // L0 Right thumb cluster
     case RSFT_T(KC_BSPC):
     case RCTL_T(KC_SPC):
     case ALT_T(_KC_HEN):
     case RGUI_T(KC_APP):
 
+    // L1 Left thumb cluster
     /* case LGUI_T(KC_): */
     /* case ALT_T(KC_): */
     case LCTL_T(KC_SPC):
     case LSFT_T(KC_BSPC):
+    // L1 Right thumb cluster
     case RSFT_T(KC_DEL):
     /* case RCTL_T(KC_): */
     case ALT_T(_KC_MHEN):
     /* case RGUI_T(KC_): */
-
         return true;
     default:
-        // Otherwise defer to the opposite hands rule.
-        return get_chordal_hold_default(tap_hold_record, other_record);
+        return false;
     }
+}
+
+bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
+ uint16_t other_keycode, keyrecord_t* other_record) {
+    if (strong_hold_keycode(tab_hold_key)) {
+        return true
+    }
+
+    return get_chordal_hold_default(tap_hold_record, other_record);
+}
+
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    return strong_hold_keycode(keycode);
 }
