@@ -20,33 +20,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
 
-enum layer_number {
-    _QWERTY = 0,
-    _RAISE,
-    _LOWER,
-    _ADJUST,
-};
-
-#define KC_L_SPC LT(_LOWER, KC_SPC)  // lower
-#define KC_R_ENT LT(_RAISE, KC_ENT)  // raise
-#define KC_G_JA LGUI_T(KC_LNG1)     // cmd or win
-#define KC_G_EN LGUI_T(KC_LNG2)     // cmd or win
-#define KC_C_BS LCTL_T(KC_BSPC)      // ctrl
-#define KC_A_DEL ALT_T(KC_DEL)       // alt
-
-#define _KC_HEN KC_INT4
-#define _KC_MHEN KC_INT5
+#define KC_HEN KC_INT4
+#define KC_MHEN KC_INT5
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
-        KC_BSLS, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , XXXXXXX,
-    //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
+        XXXXXXX, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , KC_BSLS,
+     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
    LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , KC_SCLN, LT(1,KC_QUOT),
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-  SFT_T(KC_EQL), KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, LT(2,KC_MINS),
+  LT(2, KC_EQL), KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, SFT_T(KC_MINS),
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
-               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_TAB), LT(2,KC_TAB),     SFT_T(KC_BSPC), CTL_T(KC_SPC), ALT_T(_KC_HEN), GUI_T(KC_APP)
+               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     LT(2,KC_BSPC), CTL_T(KC_SPC), (KC_HEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
@@ -58,17 +44,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, _______, _______, _______, KC_F11 , KC_F12 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                    _______, _______, CTL_T(KC_SPC), SFT_T(KC_BSPC),     SFT_T(KC_DEL), _______, ALT_T(_KC_MHEN), _______
+                    GUI_T(KC_BSPC), ALT_T(KC_SPC), _______, _______,     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
     [2] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
-        _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,    KC_9,   KC_10, _______,
+        _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_PIPE,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         KC_TILD, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC, _______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______, KC_COLN, KC_DQUO,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        KC_PLUS, _______, KC_LPRN, KC_RPRN, KC_LBRC, KC_LCBR, _______, _______, KC_RCBR, KC_RBRC, KC_LABK, KC_RABK, KC_QUES, KC_UNDS,
+        KC_PLUS, _______, KC_LPRN, KC_RPRN, KC_LCBR, KC_LBRC, _______, _______, KC_RBRC, KC_RCBR, KC_LABK, KC_RABK, KC_QUES, KC_UNDS,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
                                _______, _______, _______, S(KC_TAB),     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
@@ -97,20 +83,21 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 #endif
 
 static bool strong_hold_keycode(uint16_t keycode) {
+    // thumb cluster
+    uint16_t thumb_tap_keycodes[] = {
+        KC_APP, KC_BSPC, KC_DEL, KC_ENT, KC_ESC, KC_SPC, KC_TAB, KC_HEN, KC_MHEN
+    };
+    for (int i = 0; i < ARRAY_SIZE(thumb_tap_keycodes); i++) {
+        if (keycode == CTL_T(thumb_tap_keycodes[i]) ||
+            keycode == ALT_T(thumb_tap_keycodes[i]) ||
+            keycode == SFT_T(thumb_tap_keycodes[i]) ||
+            keycode == GUI_T(thumb_tap_keycodes[i]) ||
+            keycode == LT(2,thumb_tap_keycodes[i])) {
+            return true;
+        }
+    }
+
     switch (keycode) {
-    // L0 thumb cluster
-    case ALT_T(KC_ESC):
-    case CTL_T(KC_ENT):
-    case SFT_T(KC_TAB):  case LT(2,KC_TAB):
-    case SFT_T(KC_BSPC): case LT(2,KC_BSPC):
-    case CTL_T(KC_SPC):
-    case ALT_T(_KC_HEN):
-    case GUI_T(KC_APP):
-
-    // L1 thumb cluster
-    case SFT_T(KC_DEL):  case LT(2,KC_DEL):
-    case ALT_T(_KC_MHEN):
-
      // pinkey
     case LT(1,KC_BSLS):
     case LT(1,KC_QUOT):
