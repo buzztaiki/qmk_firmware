@@ -86,6 +86,15 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 };
 #endif
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(2,KC_SPC):
+            return 130;
+        default:
+            return TAPPING_TERM;
+    }
+}
+
 static bool strong_hold_keycode(uint16_t keycode) {
     // thumb cluster
     uint16_t thumb_tap_keycodes[] = {
