@@ -86,17 +86,7 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 };
 #endif
 
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case LT(2,KC_SPC):
-            return 130;
-        default:
-            return TAPPING_TERM;
-    }
-}
-
-static bool strong_hold_keycode(uint16_t keycode) {
-    // thumb cluster
+static bool thumb_mod_tap(uint16_t keycode) {
     uint16_t thumb_tap_keycodes[] = {
         KC_APP, KC_BSPC, KC_DEL, KC_ENT, KC_ESC, KC_SPC, KC_TAB, KC_HEN, KC_MHEN
     };
@@ -109,17 +99,31 @@ static bool strong_hold_keycode(uint16_t keycode) {
             return true;
         }
     }
+    return false;
+}
+
+
+static bool strong_hold_keycode(uint16_t keycode) {
+    if (thumb_mod_tap(keycode)) {
+        return true;
+    }
 
     switch (keycode) {
      // pinkey
     case LT(1,KC_BSLS):
     case LT(1,KC_QUOT):
-    case SFT_T(KC_EQL):  case LT(2,KC_EQL):
-    case SFT_T(KC_MINS): case LT(2,KC_MINS):
         return true;
     default:
         return false;
     }
+}
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    if (thumb_mod_tap(keycode)) {
+        return 130;
+    }
+
+    return TAPPING_TERM;
 }
 
 bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
@@ -136,20 +140,20 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *user_data) {
+static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *user_data) {
     if (state->count > 1) {
         register_code16(KC_HEN);
     }
 }
 
-void tap_dance_alt_henkan_finished(tap_dance_state_t *state, void *user_data) {
+static void tap_dance_alt_henkan_finished(tap_dance_state_t *state, void *user_data) {
     // if TAPPING_TERM have passed or other key is pressed then held alt key
     if (state->count == 1) {
         register_code16(KC_LALT);
     }
 }
 
-void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data) {
+static void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
         unregister_code16(KC_LALT);
     } else if (state->count > 1) {
