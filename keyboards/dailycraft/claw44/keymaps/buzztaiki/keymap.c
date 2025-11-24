@@ -152,7 +152,7 @@ static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *use
 }
 
 static void tap_dance_alt_henkan_finished(tap_dance_state_t *state, void *user_data) {
-    // if TAPPING_TERM have passed or other key is pressed then held alt key
+    // if TAPPING_TERM has passed or other key is pressed then held alt key
     if (state->count == 1) {
         register_code16(KC_LALT);
     }
