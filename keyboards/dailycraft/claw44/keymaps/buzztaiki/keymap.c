@@ -110,8 +110,8 @@ static bool strong_hold_keycode(uint16_t keycode) {
     }
 
     switch (keycode) {
-     // pinkey
-    case LT(1,KC_BSLS):
+     // pinky
+    case LT(1,KC_GRV):
     case LT(1,KC_QUOT):
         return true;
     default:
