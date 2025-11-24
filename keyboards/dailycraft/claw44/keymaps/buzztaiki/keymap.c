@@ -120,11 +120,20 @@ static bool strong_hold_keycode(uint16_t keycode) {
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case LT(2,KC_SPC):
+        return 115;
+    }
+
     if (thumb_mod_tap(keycode)) {
         return 130;
     }
 
     return TAPPING_TERM;
+}
+
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    return strong_hold_keycode(keycode);
 }
 
 bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
@@ -135,11 +144,6 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
 
     return get_chordal_hold_default(tap_hold_record, other_record);
 }
-
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    return strong_hold_keycode(keycode);
-}
-
 
 static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *user_data) {
     if (state->count > 1) {
