@@ -137,7 +137,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
- uint16_t other_keycode, keyrecord_t* other_record) {
+                       uint16_t other_keycode, keyrecord_t* other_record) {
     if (strong_hold_keycode(tap_hold_keycode)) {
         return true;
     }
