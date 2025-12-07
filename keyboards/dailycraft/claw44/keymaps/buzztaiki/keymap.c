@@ -23,6 +23,10 @@ enum {
     TD_ALT_HEN,
 };
 
+enum custom_keycodes {
+    CK_CLEAR_ALL
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
@@ -30,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
    LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , KC_SCLN, LT(1,KC_QUOT),
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-       MO(2)   , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, KC_RCTL,
+       TG(1)   , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, CK_CLEAR_ALL,
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
              KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), TD(TD_ALT_HEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
@@ -38,11 +42,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [1] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
-        _______, _______, _______, _______, KC_F11 , KC_F12 ,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END , _______, _______,
+        QK_BOOT, _______, _______, _______, KC_F11 , KC_F12 ,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END , _______, QK_BOOT,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , _______, _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, _______,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        QK_BOOT, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, QK_BOOT,
+        _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
                     GUI_T(KC_SPC), ALT_T(KC_BSPC), _______, _______,     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
@@ -166,3 +170,15 @@ static void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data
 tap_dance_action_t tap_dance_actions[] = {
     [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
 };
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+  case CK_CLEAR_ALL:
+      if (record->event.pressed) {
+          clear_mods();
+          layer_clear();
+      }
+      break;
+  }
+  return true;
+}
