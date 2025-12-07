@@ -21,6 +21,7 @@
 
 enum {
     TD_ALT_HEN,
+    TD_CTL_CENT,
 };
 
 enum custom_keycodes {
@@ -36,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
        TG(1)   , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, CK_CLEAR_ALL,
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
-             KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), TD(TD_ALT_HEN), GUI_T(KC_APP)
+               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), TD(TD_ALT_HEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
@@ -61,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, _______, KC_BSLS, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                           _______, _______, CTL_T(KC_SPC), _______,     _______, _______, _______, _______
+                         _______, _______, TD(TD_CTL_CENT), _______,     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
@@ -145,6 +146,9 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
     return get_chordal_hold_default(tap_hold_record, other_record);
 }
 
+// TAP_DANCE_ALT_HENKAN
+// tap twice or more to send henkan, otherwise to send alt
+
 static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *user_data) {
     if (state->count > 1) {
         register_code16(KC_HEN);
@@ -152,8 +156,9 @@ static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *use
 }
 
 static void tap_dance_alt_henkan_finished(tap_dance_state_t *state, void *user_data) {
-    // if TAPPING_TERM has passed or other key is pressed then held alt key
-    if (state->count == 1) {
+    if (state->count == 1
+        && (state->pressed || state->interrupted))
+    {
         register_code16(KC_LALT);
     }
 }
@@ -166,9 +171,30 @@ static void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data
     }
 }
 
+// TAP_DANCE_CTL_CENT
+// tap to send ctrl-enter, held to send ctrl
+
+static void tap_dance_ctl_cent_on_each_tap(tap_dance_state_t *state, void *user_data) {
+    // do nothing
+}
+
+static void tap_dance_ctl_cent_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed || state->interrupted) {
+        register_code16(KC_LCTL);
+    }
+    else {
+        tap_code16(LCTL(KC_ENT));
+    }
+}
+
+static void tap_dance_ctl_cent_reset(tap_dance_state_t *state, void *user_data) {
+    unregister_code16(KC_LCTL);
+}
+
 
 tap_dance_action_t tap_dance_actions[] = {
     [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
+    [TD_CTL_CENT] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_ctl_cent_on_each_tap, tap_dance_ctl_cent_finished, tap_dance_ctl_cent_reset),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
