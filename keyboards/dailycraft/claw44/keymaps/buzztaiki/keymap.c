@@ -28,6 +28,8 @@ enum custom_keycodes {
     CK_CLEAR_ALL
 };
 
+// TODO: use home row mods for shift and win
+// TODO: use outer thumb key as number layer?
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
