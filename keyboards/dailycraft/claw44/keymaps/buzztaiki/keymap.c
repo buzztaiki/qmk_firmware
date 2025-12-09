@@ -19,6 +19,11 @@
 #define KC_HEN KC_INT4
 #define KC_MHEN KC_INT5
 
+#define CT CTL_T
+#define ST SFT_T
+#define AT ALT_T
+#define GT GUI_T
+
 enum {
     TD_ALT_HEN,
     TD_CTL_CENT,
@@ -28,19 +33,17 @@ enum custom_keycodes {
     CK_CLEAR_ALL
 };
 
-// TODO: use home row mods for shift and win
 // TODO: use outer thumb key as number layer?
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
-    //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
-        KC_EQL , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , KC_MINS,
-    //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-   LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , KC_SCLN, LT(1,KC_QUOT),
-    //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-       TG(1)   , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, CK_CLEAR_ALL,
-    //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
+    //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
+        KC_EQL , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I  , KC_O   , KC_P   , KC_MINS,
+    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
+   LT(1,KC_GRV),ST(KC_A),GT(KC_S), KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J   , KC_K   ,GT(KC_L),ST(KC_SCLN),LT(1,KC_QUOT),
+    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
+       TG(1)   , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, CK_CLEAR_ALL,
+    //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
                KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), TD(TD_ALT_HEN), GUI_T(KC_APP)
-    //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
     [1] = LAYOUT(
@@ -57,15 +60,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
     [2] = LAYOUT(
-    //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
-        KC_PLUS, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_UNDS,
-    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        KC_TILD, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , _______, _______, KC_LCBR, KC_LBRC, KC_RBRC, KC_RCBR, KC_COLN, KC_DQUO,
-    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, _______, KC_BSLS, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
-    //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
+    //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+-----------+-----------+--------.
+        KC_PLUS, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN   , KC_RPRN   , KC_UNDS,
+    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+-----------+-----------+--------|
+        KC_TILD,ST(KC_1),GT(KC_2), KC_3   , KC_4   , KC_5   , _______, _______, KC_LCBR, KC_LBRC, KC_RBRC,GT(KC_RCBR),ST(KC_COLN), KC_DQUO,
+    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+-----------+-----------+--------|
+        _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, _______, KC_BSLS, KC_PIPE, KC_LABK, KC_RABK   , KC_QUES   , _______,
+    //`--------+--------+--------+--------+--------+--------/                 \----------+--------+--------+---------+-----------+--------'
                          _______, _______, TD(TD_CTL_CENT), _______,     _______, _______, _______, _______
-    //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
     [3] = LAYOUT(
@@ -77,7 +79,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______,  _______, _______,    _______, _______, _______, _______, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                     \--------+--------+--------+--------+--------+--------'
                           _______, _______, _______, _______,                       _______, _______, _______, _______
-    //                  `--------+--------+--------+--------'                     `--------+--------+--------+--------'
     ),
 };
 
@@ -200,13 +201,26 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-  case CK_CLEAR_ALL:
-      if (record->event.pressed) {
-          clear_mods();
-          layer_clear();
-      }
-      break;
-  }
-  return true;
+    switch (keycode) {
+    case CK_CLEAR_ALL:
+        if (record->event.pressed) {
+            clear_mods();
+            layer_clear();
+        }
+        break;
+    case ST(KC_COLN):
+        if (record->tap.count && record->event.pressed) {
+            tap_code16(KC_COLN);
+            return false;
+        }
+        break;
+
+    case GT(KC_RCBR):
+        if (record->tap.count && record->event.pressed) {
+            tap_code16(KC_RCBR);
+            return false;
+        }
+        break;
+    }
+    return true;
 }
