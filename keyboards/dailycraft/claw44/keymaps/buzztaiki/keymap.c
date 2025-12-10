@@ -30,7 +30,7 @@ enum tap_dance_keycodes {
 };
 
 enum custom_keycodes {
-    CK_CLEAR_ALL
+    CK_CLEAR_ALL = SAFE_RANGE
 };
 
 // TODO: use outer thumb key as number layer?
