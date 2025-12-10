@@ -24,7 +24,7 @@
 #define AT ALT_T
 #define GT GUI_T
 
-enum {
+enum tap_dance_keycodes {
     TD_ALT_HEN,
     TD_CTL_CENT,
 };
@@ -60,13 +60,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
     [2] = LAYOUT(
-    //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+-----------+-----------+--------.
-        KC_PLUS, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN   , KC_RPRN   , KC_UNDS,
-    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+-----------+-----------+--------|
-        KC_TILD,ST(KC_1),GT(KC_2), KC_3   , KC_4   , KC_5   , _______, _______, KC_LCBR, KC_LBRC, KC_RBRC,GT(KC_RCBR),ST(KC_COLN), KC_DQUO,
-    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+-----------+-----------+--------|
-        _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, _______, KC_BSLS, KC_PIPE, KC_LABK, KC_RABK   , KC_QUES   , _______,
-    //`--------+--------+--------+--------+--------+--------/                 \----------+--------+--------+---------+-----------+--------'
+    //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+-----------+---------+--------.
+        KC_PLUS, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN   , KC_RPRN , KC_UNDS,
+    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+-----------+---------+--------|
+        KC_TILD, KC_1   ,GT(KC_2), KC_3   , KC_4   , KC_5   , _______, _______, KC_LCBR, KC_LBRC, KC_RBRC,GT(KC_RCBR), KC_COLN , KC_DQUO,
+    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+-----------+---------+--------|
+        _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, _______, KC_BSLS, KC_PIPE, KC_LABK, KC_RABK   , KC_QUES , _______,
+    //`--------+--------+--------+--------+--------+--------/                 \----------+--------+--------+---------+---------+--------'
                          _______, _______, TD(TD_CTL_CENT), _______,     _______, _______, _______, _______
     ),
 
@@ -208,13 +208,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             layer_clear();
         }
         break;
-    case ST(KC_COLN):
-        if (record->tap.count && record->event.pressed) {
-            tap_code16(KC_COLN);
-            return false;
-        }
-        break;
-
     case GT(KC_RCBR):
         if (record->tap.count && record->event.pressed) {
             tap_code16(KC_RCBR);
