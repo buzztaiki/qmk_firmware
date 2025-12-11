@@ -23,6 +23,7 @@ enum {
     TD_ALT_HEN,
     TD_CTL_CENT,
     TD_SFT_STAB,
+    TD_CTL_CTAB,
 };
 
 enum custom_keycodes {
@@ -51,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-            GUI_T(KC_SPC), ALT_T(KC_BSPC), TD(TD_SFT_STAB), _______,     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
+            GUI_T(KC_SPC), ALT_T(KC_BSPC), _______, TD(TD_SFT_STAB),     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
@@ -64,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, _______, KC_BSLS, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                         _______, _______, TD(TD_CTL_CENT), _______,     _______, _______, _______, _______
+                 _______, _______, TD(TD_CTL_CENT), TD(TD_CTL_CTAB),     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
@@ -209,6 +210,7 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
     [TD_CTL_CENT] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_ENT)),
     [TD_SFT_STAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LSFT, LSFT(KC_TAB)),
+    [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB)),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
