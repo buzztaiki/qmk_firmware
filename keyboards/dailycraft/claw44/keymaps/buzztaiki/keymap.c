@@ -22,6 +22,7 @@
 enum {
     TD_ALT_HEN,
     TD_CTL_CENT,
+    TD_SFT_STAB,
 };
 
 enum custom_keycodes {
@@ -50,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                    GUI_T(KC_SPC), ALT_T(KC_BSPC), _______, _______,     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
+            GUI_T(KC_SPC), ALT_T(KC_BSPC), TD(TD_SFT_STAB), _______,     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
@@ -192,10 +193,31 @@ static void tap_dance_ctl_cent_reset(tap_dance_state_t *state, void *user_data) 
     unregister_code16(KC_LCTL);
 }
 
+// TAP_DANCE_SFT_SALT
+// tap to send shfit-tab, held to send shift
+
+static void tap_dance_sft_stab_on_each_tap(tap_dance_state_t *state, void *user_data) {
+    // do nothing
+}
+
+static void tap_dance_sft_stab_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed || state->interrupted) {
+        register_code16(KC_LSFT);
+    }
+    else {
+        tap_code16(LSFT(KC_TAB));
+    }
+}
+
+static void tap_dance_sft_stab_reset(tap_dance_state_t *state, void *user_data) {
+    unregister_code16(KC_LSFT);
+}
+
 
 tap_dance_action_t tap_dance_actions[] = {
     [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
     [TD_CTL_CENT] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_ctl_cent_on_each_tap, tap_dance_ctl_cent_finished, tap_dance_ctl_cent_reset),
+    [TD_SFT_STAB] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_sft_stab_on_each_tap, tap_dance_sft_stab_finished, tap_dance_sft_stab_reset),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
