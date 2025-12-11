@@ -173,51 +173,42 @@ static void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data
     }
 }
 
-// TAP_DANCE_CTL_CENT
-// tap to send ctrl-enter, held to send ctrl
+// TAP_DANCE_MOD_TAP
+// tap to send tap_kc, held to send mod_kc
 
-static void tap_dance_ctl_cent_on_each_tap(tap_dance_state_t *state, void *user_data) {
+#define ACTION_TAP_DANCE_MOD_TAP(mod_kc, tap_kc) \
+    { .fn = {tap_dance_mod_tap_on_each_tap, tap_dance_mod_tap_finished, tap_dance_mod_tap_reset, NULL}, .user_data = (void *)&((tap_dance_mod_tap_t){mod_kc, tap_kc}), }
+
+typedef struct {
+    uint16_t mod_kc;
+    uint16_t tap_kc;
+} tap_dance_mod_tap_t;
+
+static void tap_dance_mod_tap_on_each_tap(tap_dance_state_t *state, void *user_data) {
     // do nothing
 }
 
-static void tap_dance_ctl_cent_finished(tap_dance_state_t *state, void *user_data) {
+static void tap_dance_mod_tap_finished(tap_dance_state_t *state, void *user_data) {
+    tap_dance_mod_tap_t *mod_tap = (tap_dance_mod_tap_t *)user_data;
+
     if (state->pressed || state->interrupted) {
-        register_code16(KC_LCTL);
+        register_code16(mod_tap->mod_kc);
     }
     else {
-        tap_code16(LCTL(KC_ENT));
+        tap_code16(mod_tap->tap_kc);
     }
 }
 
-static void tap_dance_ctl_cent_reset(tap_dance_state_t *state, void *user_data) {
-    unregister_code16(KC_LCTL);
-}
-
-// TAP_DANCE_SFT_SALT
-// tap to send shfit-tab, held to send shift
-
-static void tap_dance_sft_stab_on_each_tap(tap_dance_state_t *state, void *user_data) {
-    // do nothing
-}
-
-static void tap_dance_sft_stab_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->pressed || state->interrupted) {
-        register_code16(KC_LSFT);
-    }
-    else {
-        tap_code16(LSFT(KC_TAB));
-    }
-}
-
-static void tap_dance_sft_stab_reset(tap_dance_state_t *state, void *user_data) {
-    unregister_code16(KC_LSFT);
+static void tap_dance_mod_tap_reset(tap_dance_state_t *state, void *user_data) {
+    tap_dance_mod_tap_t *mod_tap = (tap_dance_mod_tap_t *)user_data;
+    unregister_code16(mod_tap->mod_kc);
 }
 
 
 tap_dance_action_t tap_dance_actions[] = {
     [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
-    [TD_CTL_CENT] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_ctl_cent_on_each_tap, tap_dance_ctl_cent_finished, tap_dance_ctl_cent_reset),
-    [TD_SFT_STAB] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_sft_stab_on_each_tap, tap_dance_sft_stab_finished, tap_dance_sft_stab_reset),
+    [TD_CTL_CENT] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_ENT)),
+    [TD_SFT_STAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LSFT, LSFT(KC_TAB)),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
