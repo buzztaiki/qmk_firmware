@@ -214,13 +214,13 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-  case CK_CLEAR_ALL:
-      if (record->event.pressed) {
-          clear_mods();
-          layer_clear();
-      }
-      break;
-  }
-  return true;
+    switch (keycode) {
+    case CK_CLEAR_ALL:
+        if (record->event.pressed) {
+            clear_mods();
+            layer_clear();
+        }
+        break;
+    }
+    return true;
 }
