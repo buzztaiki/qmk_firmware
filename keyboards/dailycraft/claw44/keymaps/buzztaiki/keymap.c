@@ -21,8 +21,16 @@
 
 enum {
     TD_ALT_HEN,
+    TD_CTL_CENT,
+    TD_SFT_STAB,
+    TD_CTL_CTAB,
 };
 
+enum custom_keycodes {
+    CK_CLEAR_ALL = SAFE_RANGE
+};
+
+// TODO: use outer thumb key as number layer?
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
@@ -30,21 +38,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
    LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , KC_SCLN, LT(1,KC_QUOT),
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-       MO(2)   , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, KC_RCTL,
+       TG(1)   , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, CK_CLEAR_ALL,
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
-             KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), TD(TD_ALT_HEN), GUI_T(KC_APP)
+               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), TD(TD_ALT_HEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
     [1] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
-        _______, _______, _______, _______, KC_F11 , KC_F12 ,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END , _______, _______,
+        QK_BOOT, _______, _______, _______, KC_F11 , KC_F12 ,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END , _______, QK_BOOT,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , _______, _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, _______,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        QK_BOOT, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, QK_BOOT,
+        _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                    GUI_T(KC_SPC), ALT_T(KC_BSPC), _______, _______,     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
+            GUI_T(KC_SPC), ALT_T(KC_BSPC), _______, TD(TD_SFT_STAB),     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
@@ -57,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, _______, KC_BSLS, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                           _______, _______, CTL_T(KC_SPC), _______,     _______, _______, _______, _______
+                 _______, _______, TD(TD_CTL_CENT), TD(TD_CTL_CTAB),     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
@@ -141,6 +149,9 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
     return get_chordal_hold_default(tap_hold_record, other_record);
 }
 
+// TAP_DANCE_ALT_HENKAN
+// tap twice or more to send henkan, otherwise to send alt
+
 static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *user_data) {
     if (state->count > 1) {
         register_code16(KC_HEN);
@@ -148,8 +159,9 @@ static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *use
 }
 
 static void tap_dance_alt_henkan_finished(tap_dance_state_t *state, void *user_data) {
-    // if TAPPING_TERM has passed or other key is pressed then held alt key
-    if (state->count == 1) {
+    if (state->count == 1
+        && (state->pressed || state->interrupted))
+    {
         register_code16(KC_LALT);
     }
 }
@@ -162,7 +174,53 @@ static void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data
     }
 }
 
+// TAP_DANCE_MOD_TAP
+// tap to send tap_kc, held to send mod_kc
+
+#define ACTION_TAP_DANCE_MOD_TAP(mod_kc, tap_kc) \
+    { .fn = {tap_dance_mod_tap_on_each_tap, tap_dance_mod_tap_finished, tap_dance_mod_tap_reset, NULL}, .user_data = (void *)&((tap_dance_mod_tap_t){mod_kc, tap_kc}), }
+
+typedef struct {
+    uint16_t mod_kc;
+    uint16_t tap_kc;
+} tap_dance_mod_tap_t;
+
+static void tap_dance_mod_tap_on_each_tap(tap_dance_state_t *state, void *user_data) {
+    // do nothing
+}
+
+static void tap_dance_mod_tap_finished(tap_dance_state_t *state, void *user_data) {
+    tap_dance_mod_tap_t *mod_tap = (tap_dance_mod_tap_t *)user_data;
+
+    if (state->pressed || state->interrupted) {
+        register_code16(mod_tap->mod_kc);
+    }
+    else {
+        tap_code16(mod_tap->tap_kc);
+    }
+}
+
+static void tap_dance_mod_tap_reset(tap_dance_state_t *state, void *user_data) {
+    tap_dance_mod_tap_t *mod_tap = (tap_dance_mod_tap_t *)user_data;
+    unregister_code16(mod_tap->mod_kc);
+}
+
 
 tap_dance_action_t tap_dance_actions[] = {
     [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
+    [TD_CTL_CENT] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_ENT)),
+    [TD_SFT_STAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LSFT, LSFT(KC_TAB)),
+    [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB)),
 };
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case CK_CLEAR_ALL:
+        if (record->event.pressed) {
+            clear_mods();
+            layer_clear();
+        }
+        break;
+    }
+    return true;
+}
