@@ -60,11 +60,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [2] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
-        KC_PLUS, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_UNDS,
+        XXXXXXX, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, XXXXXXX,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        KC_TILD, _______, KC_BSLS, KC_LCBR, KC_LBRC, KC_PLUS, _______, _______, KC_MINS, KC_RBRC, KC_RCBR, KC_PIPE, KC_COLN, KC_DQUO,
+        KC_TILD, _______, KC_BSLS, KC_LCBR, KC_LBRC, KC_LPRN, _______, _______, KC_RPRN, KC_RBRC, KC_RCBR, KC_PIPE, KC_COLN, KC_DQUO,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        _______, _______, _______, _______, KC_EQL , _______, _______, _______, _______, KC_UNDS , KC_LABK, KC_RABK, KC_QUES, _______,
+        _______, _______, _______, _______, KC_PLUS, KC_EQL , _______, _______, KC_UNDS, KC_MINS, KC_LABK, KC_RABK, KC_QUES, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
                  _______, _______, TD(TD_CTL_CENT), TD(TD_CTL_CTAB),     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
