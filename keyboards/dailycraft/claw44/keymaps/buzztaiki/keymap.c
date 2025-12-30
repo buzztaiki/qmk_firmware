@@ -30,9 +30,6 @@ enum custom_keycodes {
     CK_CLEAR_ALL = SAFE_RANGE
 };
 
-// TODO: number layer
-// TODO: home/end
-// TODO: symbols
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
@@ -54,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-            GUI_T(KC_SPC), ALT_T(KC_BSPC), _______, TD(TD_SFT_STAB),     _______, _______, ALT_T(KC_MHEN), _______
+            _______, ALT_T(KC_SPC), CTL_T(KC_BSPC), TD(TD_SFT_STAB),     _______, _______, ALT_T(KC_MHEN), _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
