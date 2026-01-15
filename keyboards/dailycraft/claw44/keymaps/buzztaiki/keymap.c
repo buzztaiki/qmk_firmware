@@ -33,13 +33,13 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
-       KC_HEN  , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , KC_MHEN,
+       KC_ESC  , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , CK_CLEAR_ALL,
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-   LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , LT(3,KC_SCLN), LT(1,KC_QUOT),
+   LT(1,KC_TAB), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , LT(3,KC_SCLN), LT(1,KC_QUOT),
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-        KC_DEL , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, CK_CLEAR_ALL,
+        XXXXXXX, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, XXXXXXX,
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
-               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), ALT_T(KC_MHEN), GUI_T(KC_APP)
+              KC_LGUI, ALT_T(KC_MHEN), CTL_T(KC_ENT), SFT_T(KC_DEL),     SFT_T(KC_BSPC), LT(2,KC_SPC), ALT_T(KC_HEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
@@ -51,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-            _______, ALT_T(KC_SPC), CTL_T(KC_BSPC), TD(TD_SFT_STAB),     _______, _______, ALT_T(KC_HEN), _______
+                    _______, ALT_T(KC_SPC), CTL_T(KC_BSPC), _______,     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
@@ -59,11 +59,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
         XXXXXXX, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, XXXXXXX,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        KC_TILD, _______, KC_LBRC, KC_RBRC, KC_MINS,  KC_EQL, _______, _______, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, KC_COLN, KC_DQUO,
+        KC_GRV , KC_TILD, KC_LBRC, KC_RBRC, KC_MINS,  KC_EQL, _______, _______, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, KC_COLN, KC_DQUO,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, _______, _______, _______, KC_BSLS, _______, _______, _______, _______, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-                 _______, _______, TD(TD_CTL_CENT), TD(TD_CTL_CTAB),     _______, _______, _______, _______
+                         _______, _______, TD(TD_CTL_CENT), _______,     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
