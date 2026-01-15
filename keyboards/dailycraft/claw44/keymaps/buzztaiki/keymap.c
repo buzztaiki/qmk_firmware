@@ -148,53 +148,45 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
     return get_chordal_hold_default(tap_hold_record, other_record);
 }
 
-// TAP_DANCE_ALT_HENKAN
-// tap twice or more to send henkan, otherwise to send alt
-
-static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *user_data) {
-    if (state->count > 1) {
-        register_code16(KC_HEN);
-    }
-}
-
-static void tap_dance_alt_henkan_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1
-        && (state->pressed || state->interrupted))
-    {
-        register_code16(KC_LALT);
-    }
-}
-
-static void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        unregister_code16(KC_LALT);
-    } else if (state->count > 1) {
-        unregister_code16(KC_HEN);
-    }
-}
-
 // TAP_DANCE_MOD_TAP
 // tap to send tap_kc, held to send mod_kc
 
-#define ACTION_TAP_DANCE_MOD_TAP(mod_kc, tap_kc) \
-    { .fn = {tap_dance_mod_tap_on_each_tap, tap_dance_mod_tap_finished, tap_dance_mod_tap_reset, NULL}, .user_data = (void *)&((tap_dance_mod_tap_t){mod_kc, tap_kc}), }
+#define ACTION_TAP_DANCE_MOD_TAP(mod_kc, tap_kc, tap_count) \
+    { .fn = {tap_dance_mod_tap_on_each_tap, tap_dance_mod_tap_finished, tap_dance_mod_tap_reset, NULL}, .user_data = (void *)&((tap_dance_mod_tap_t){mod_kc, tap_kc, tap_count}), }
 
 typedef struct {
     uint16_t mod_kc;
     uint16_t tap_kc;
+    uint8_t tap_start;
 } tap_dance_mod_tap_t;
 
 static void tap_dance_mod_tap_on_each_tap(tap_dance_state_t *state, void *user_data) {
-    // do nothing
+    tap_dance_mod_tap_t *mod_tap = (tap_dance_mod_tap_t *)user_data;
+
+    if (state->count == 1) {
+        return;
+    }
+
+    if (state->count == 2 && mod_tap->tap_start == 1) {
+        // send first tap delayed
+        tap_code16(mod_tap->tap_kc);
+    }
+    if (state->count >= mod_tap->tap_start) {
+        // repeat tap
+        tap_code16(mod_tap->tap_kc);
+    }
 }
 
 static void tap_dance_mod_tap_finished(tap_dance_state_t *state, void *user_data) {
     tap_dance_mod_tap_t *mod_tap = (tap_dance_mod_tap_t *)user_data;
 
+    if (state->count > 1) {
+        return;
+    }
+
     if (state->pressed || state->interrupted) {
         register_code16(mod_tap->mod_kc);
-    }
-    else {
+    } else if (mod_tap->tap_start == 1) {
         tap_code16(mod_tap->tap_kc);
     }
 }
@@ -206,10 +198,10 @@ static void tap_dance_mod_tap_reset(tap_dance_state_t *state, void *user_data) {
 
 
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
-    [TD_CTL_CENT] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_ENT)),
-    [TD_SFT_STAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LSFT, LSFT(KC_TAB)),
-    [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB)),
+    [TD_ALT_HEN] = ACTION_TAP_DANCE_MOD_TAP(KC_LALT, KC_HEN, 2),
+    [TD_CTL_CENT] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_ENT), 1),
+    [TD_SFT_STAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LSFT, LSFT(KC_TAB), 1),
+    [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB), 1),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
