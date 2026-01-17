@@ -30,6 +30,8 @@ enum custom_keycodes {
     CK_CLEAR_ALL = SAFE_RANGE
 };
 
+// TODO: tab/esc や hen/mhen は元に戻した方がよさげ
+// TODO: ralt を mhen にして、lalt -> ralt の combo を hen にするとよいかも
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
