@@ -20,7 +20,6 @@
 #define KC_MHEN KC_INT5
 
 enum {
-    TD_ALT_HEN,
     TD_CTL_CENT,
     TD_SFT_STAB,
     TD_CTL_CTAB,
@@ -164,13 +163,12 @@ uint16_t get_combo_term(uint16_t combo_index, combo_t *combo) {
 // TAP_DANCE_MOD_TAP
 // tap to send tap_kc, held to send mod_kc
 
-#define ACTION_TAP_DANCE_MOD_TAP(mod_kc, tap_kc, tap_count) \
-    { .fn = {tap_dance_mod_tap_on_each_tap, tap_dance_mod_tap_finished, tap_dance_mod_tap_reset, NULL}, .user_data = (void *)&((tap_dance_mod_tap_t){mod_kc, tap_kc, tap_count}), }
+#define ACTION_TAP_DANCE_MOD_TAP(mod_kc, tap_kc) \
+    { .fn = {tap_dance_mod_tap_on_each_tap, tap_dance_mod_tap_finished, tap_dance_mod_tap_reset, NULL}, .user_data = (void *)&((tap_dance_mod_tap_t){mod_kc, tap_kc}), }
 
 typedef struct {
     uint16_t mod_kc;
     uint16_t tap_kc;
-    uint8_t tap_start;
 } tap_dance_mod_tap_t;
 
 static void tap_dance_mod_tap_on_each_tap(tap_dance_state_t *state, void *user_data) {
@@ -180,14 +178,12 @@ static void tap_dance_mod_tap_on_each_tap(tap_dance_state_t *state, void *user_d
         return;
     }
 
-    if (state->count == 2 && mod_tap->tap_start == 1) {
+    if (state->count == 2) {
         // send first tap delayed
         tap_code16(mod_tap->tap_kc);
     }
-    if (state->count >= mod_tap->tap_start) {
-        // repeat tap
-        tap_code16(mod_tap->tap_kc);
-    }
+    // repeat tap
+    tap_code16(mod_tap->tap_kc);
 }
 
 static void tap_dance_mod_tap_finished(tap_dance_state_t *state, void *user_data) {
@@ -199,7 +195,7 @@ static void tap_dance_mod_tap_finished(tap_dance_state_t *state, void *user_data
 
     if (state->pressed || state->interrupted) {
         register_code16(mod_tap->mod_kc);
-    } else if (mod_tap->tap_start == 1) {
+    } else {
         tap_code16(mod_tap->tap_kc);
     }
 }
@@ -211,10 +207,9 @@ static void tap_dance_mod_tap_reset(tap_dance_state_t *state, void *user_data) {
 
 
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_ALT_HEN] = ACTION_TAP_DANCE_MOD_TAP(KC_LALT, KC_HEN, 2),
-    [TD_CTL_CENT] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_ENT), 1),
-    [TD_SFT_STAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LSFT, LSFT(KC_TAB), 1),
-    [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB), 1),
+    [TD_CTL_CENT] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_ENT)),
+    [TD_SFT_STAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LSFT, LSFT(KC_TAB)),
+    [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB)),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
