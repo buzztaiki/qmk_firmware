@@ -20,7 +20,6 @@
 #define KC_MHEN KC_INT5
 
 enum {
-    TD_ALT_HEN,
     TD_CTL_CENT,
     TD_SFT_STAB,
     TD_CTL_CTAB,
@@ -30,17 +29,21 @@ enum custom_keycodes {
     CK_CLEAR_ALL = SAFE_RANGE
 };
 
-// TODO: use outer thumb key as number layer?
+const uint16_t PROGMEM combo_hen[] = {ALT_T(KC_ESC), ALT_T(KC_MHEN), COMBO_END};
+combo_t key_combos[] = {
+    COMBO(combo_hen, KC_HEN),
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
-        KC_EQL , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , KC_MINS,
+   CK_CLEAR_ALL, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   ,  KC_DEL,
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-   LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , KC_SCLN, LT(1,KC_QUOT),
+   LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , LT(3,KC_SCLN), LT(1,KC_QUOT),
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
-       TG(1)   , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, CK_CLEAR_ALL,
+        XXXXXXX, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, XXXXXXX,
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
-               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), TD(TD_ALT_HEN), GUI_T(KC_APP)
+               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), ALT_T(KC_MHEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
@@ -52,33 +55,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-            GUI_T(KC_SPC), ALT_T(KC_BSPC), _______, TD(TD_SFT_STAB),     SFT_T(KC_DEL), _______, ALT_T(KC_MHEN), _______
+            _______, ALT_T(KC_SPC), CTL_T(KC_BSPC), TD(TD_SFT_STAB),     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
-
     [2] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
-        KC_PLUS, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_UNDS,
+        XXXXXXX, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, XXXXXXX,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        KC_TILD, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , _______, _______, KC_LCBR, KC_LBRC, KC_RBRC, KC_RCBR, KC_COLN, KC_DQUO,
+        KC_TILD, _______, KC_LBRC, KC_RBRC, KC_MINS,  KC_EQL, _______, _______, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, KC_COLN, KC_DQUO,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-        _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, _______, KC_BSLS, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
+        _______, _______, _______, _______, KC_BSLS, _______, _______, _______, _______, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
                  _______, _______, TD(TD_CTL_CENT), TD(TD_CTL_CTAB),     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
     [3] = LAYOUT(
-    //,--------+--------+--------+--------+--------+--------.                     ,--------+--------+--------+--------+--------+--------.
-        _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
-    //|--------+--------+--------+--------+--------+--------|                     |--------+--------+--------+--------+--------+--------|
-        _______, _______, _______, _______, _______, _______,  _______, _______,    _______, _______, _______, _______, _______, _______,
-    //|--------+--------+--------+--------+--------+--------|                     |--------+--------+--------+--------+--------+--------|
-        _______, _______, _______, _______, _______, _______,  _______, _______,    _______, _______, _______, _______, _______, _______,
-    //`--------+--------+--------+--------+--------+--------/                     \--------+--------+--------+--------+--------+--------'
-                          _______, _______, _______, _______,                       _______, _______, _______, _______
-    //                  `--------+--------+--------+--------'                     `--------+--------+--------+--------'
+    //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
+        _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
+    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
+        _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , _______, _______, KC_6   , KC_7   , KC_8   , KC_9   , _______, _______,
+    //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
+        _______, _______, _______, _______, KC_0   , _______, _______, _______, _______, KC_0   , _______, _______, _______, _______,
+    //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
+                                    _______, _______, KC_0, _______,     _______, KC_0, _______, _______
+    //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 };
 
@@ -117,6 +119,7 @@ static bool strong_hold_keycode(uint16_t keycode) {
     // pinky
     case LT(1,KC_GRV):
     case LT(1,KC_QUOT):
+    case LT(3,KC_SCLN):
         return true;
     default:
         return false;
@@ -149,29 +152,12 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
     return get_chordal_hold_default(tap_hold_record, other_record);
 }
 
-// TAP_DANCE_ALT_HENKAN
-// tap twice or more to send henkan, otherwise to send alt
-
-static void tap_dance_alt_henkan_on_each_tap(tap_dance_state_t *state, void *user_data) {
-    if (state->count > 1) {
-        register_code16(KC_HEN);
+uint16_t get_combo_term(uint16_t combo_index, combo_t *combo) {
+    switch (combo->keycode) {
+    case KC_HEN:
+        return TAPPING_TERM;
     }
-}
-
-static void tap_dance_alt_henkan_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1
-        && (state->pressed || state->interrupted))
-    {
-        register_code16(KC_LALT);
-    }
-}
-
-static void tap_dance_alt_henkan_reset(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        unregister_code16(KC_LALT);
-    } else if (state->count > 1) {
-        unregister_code16(KC_HEN);
-    }
+    return COMBO_TERM;
 }
 
 // TAP_DANCE_MOD_TAP
@@ -186,16 +172,30 @@ typedef struct {
 } tap_dance_mod_tap_t;
 
 static void tap_dance_mod_tap_on_each_tap(tap_dance_state_t *state, void *user_data) {
-    // do nothing
+    tap_dance_mod_tap_t *mod_tap = (tap_dance_mod_tap_t *)user_data;
+
+    if (state->count == 1) {
+        return;
+    }
+
+    if (state->count == 2) {
+        // send first tap delayed
+        tap_code16(mod_tap->tap_kc);
+    }
+    // repeat tap
+    tap_code16(mod_tap->tap_kc);
 }
 
 static void tap_dance_mod_tap_finished(tap_dance_state_t *state, void *user_data) {
     tap_dance_mod_tap_t *mod_tap = (tap_dance_mod_tap_t *)user_data;
 
+    if (state->count > 1) {
+        return;
+    }
+
     if (state->pressed || state->interrupted) {
         register_code16(mod_tap->mod_kc);
-    }
-    else {
+    } else {
         tap_code16(mod_tap->tap_kc);
     }
 }
@@ -207,7 +207,6 @@ static void tap_dance_mod_tap_reset(tap_dance_state_t *state, void *user_data) {
 
 
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_ALT_HEN] = ACTION_TAP_DANCE_FN_ADVANCED(tap_dance_alt_henkan_on_each_tap, tap_dance_alt_henkan_finished, tap_dance_alt_henkan_reset),
     [TD_CTL_CENT] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_ENT)),
     [TD_SFT_STAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LSFT, LSFT(KC_TAB)),
     [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB)),
