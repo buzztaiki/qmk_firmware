@@ -30,23 +30,21 @@ enum custom_keycodes {
     CK_CLEAR_ALL = SAFE_RANGE
 };
 
-const uint16_t PROGMEM combo_hen[] = {ALT_T(KC_ESC), ALT_T(KC_DEL), COMBO_END};
-const uint16_t PROGMEM combo_mhen[] = {ALT_T(KC_DEL), ALT_T(KC_ESC), COMBO_END};
+const uint16_t PROGMEM combo_hen[] = {ALT_T(KC_ESC), ALT_T(KC_MHEN), COMBO_END};
 combo_t key_combos[] = {
     COMBO(combo_hen, KC_HEN),
-    COMBO(combo_mhen, KC_MHEN),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
-   CK_CLEAR_ALL, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   , XXXXXXX,
+   CK_CLEAR_ALL, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U    , KC_I   , KC_O    , KC_P   ,  KC_DEL,
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
    LT(1,KC_GRV), KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , XXXXXXX, XXXXXXX, KC_H   , KC_J    , KC_K   , KC_L    , LT(3,KC_SCLN), LT(1,KC_QUOT),
     //|--------+--------+--------+--------+--------+--------|                 |--------+---------+--------+---------+--------+--------|
         XXXXXXX, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , XXXXXXX, XXXXXXX, KC_N   , KC_M    , KC_COMM, KC_DOT  , KC_SLSH, XXXXXXX,
     //`--------+--------+--------+--------+--------+--------/                 \--------+---------+--------+---------+--------+--------'
-               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), ALT_T(KC_DEL), GUI_T(KC_APP)
+               KC_LGUI, ALT_T(KC_ESC), CTL_T(KC_ENT), SFT_T(KC_TAB),     SFT_T(KC_BSPC), LT(2,KC_SPC), ALT_T(KC_MHEN), GUI_T(KC_APP)
     //                  `--------+--------+--------+--------'                 `--------+---------+--------+---------'
     ),
 
@@ -58,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, _______, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
-            _______, ALT_T(KC_SPC), CTL_T(KC_BSPC), TD(TD_SFT_STAB),     _______, _______, ALT_T(KC_HEN), _______
+            _______, ALT_T(KC_SPC), CTL_T(KC_BSPC), TD(TD_SFT_STAB),     _______, _______, _______, _______
     //                  `--------+--------+--------+--------'                 `--------+--------+--------+--------'
     ),
 
@@ -158,7 +156,6 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
 uint16_t get_combo_term(uint16_t combo_index, combo_t *combo) {
     switch (combo->keycode) {
     case KC_HEN:
-    case KC_MHEN:
         return TAPPING_TERM;
     }
     return COMBO_TERM;
