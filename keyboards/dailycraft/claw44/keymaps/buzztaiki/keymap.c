@@ -29,11 +29,6 @@ enum custom_keycodes {
     CK_CLEAR_ALL = SAFE_RANGE
 };
 
-const uint16_t PROGMEM combo_hen[] = {ALT_T(KC_ESC), ALT_T(KC_MHEN), COMBO_END};
-combo_t key_combos[] = {
-    COMBO(combo_hen, KC_HEN),
-};
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
     //,--------+--------+--------+--------+--------+--------.                 ,--------+---------+--------+---------+--------+--------.
@@ -152,14 +147,6 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
     return get_chordal_hold_default(tap_hold_record, other_record);
 }
 
-uint16_t get_combo_term(uint16_t combo_index, combo_t *combo) {
-    switch (combo->keycode) {
-    case KC_HEN:
-        return TAPPING_TERM;
-    }
-    return COMBO_TERM;
-}
-
 // TAP_DANCE_MOD_TAP
 // tap to send tap_kc, held to send mod_kc
 
@@ -219,7 +206,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             clear_mods();
             layer_clear();
         }
-        break;
+        return false;
     }
     return true;
 }
