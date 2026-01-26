@@ -124,16 +124,18 @@ static bool strong_hold_keycode(uint16_t keycode) {
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-    case LT(2,KC_SPC):
-        return 115;
-    }
-
     if (thumb_mod_tap(keycode)) {
         return 130;
     }
 
-    return TAPPING_TERM;
+    switch (keycode) {
+    case LT(2,KC_SPC):
+        return 115;
+    case LT(3,KC_A):
+        return get_mods() == MOD_BIT(KC_LCTL) ? 500 : TAPPING_TERM;
+    default:
+        return TAPPING_TERM;
+    }
 }
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
