@@ -28,15 +28,33 @@ enum {
 };
 
 enum custom_keycodes {
-    CK_CLEAR_ALL = SAFE_RANGE
+    CK_CLEAR_ALL = SAFE_RANGE,
+
+    // home row mods left
+    CK_TILD, CK_LBRC,
+    // home row mods right
+    CK_RCBR, CK_COLN, CK_DQUO,
 };
 
-#define HRM(L1,L2,L3,L4,L5,L6,C1,C2,R1,R2,R3,R4,R5,R6) \
-    LT(1,L1), LT(3,L2), GT(L3),                        \
-        L4, L5, L6,                                    \
-        C1, C2,                                        \
-        R1, R2, R3,                                    \
-        GT(R4), LT(3,R5), LT(1,R6)
+#define CASE_CUSTOM_KEY_TAP(from, to) \
+    case from: return custom_key_tap(to, record);
+
+#define CASE_CUSTOM_KEY_TAPS                            \
+    /* home row mods left */                            \
+    CASE_CUSTOM_KEY_TAP(LT(1,CK_TILD), KC_TILD);        \
+    /* CASE_CUSTOM_KEY_TAP(LT(3,CK_*), KC_*); */        \
+    CASE_CUSTOM_KEY_TAP(GT(CK_LBRC), KC_LBRC);          \
+    /* home row mods right */                           \
+    CASE_CUSTOM_KEY_TAP(GT(CK_RCBR), KC_RCBR);          \
+    CASE_CUSTOM_KEY_TAP(LT(3,CK_COLN), KC_COLN);        \
+    CASE_CUSTOM_KEY_TAP(LT(1,CK_DQUO), KC_DQUO);
+
+#define HRM(l1,l2,l3,l4,l5,l6,c1,c2,r1,r2,r3,r4,r5,r6)  \
+    LT(1,l1), LT(3,l2), GT(l3),                         \
+        l4, l5, l6,                                     \
+        c1, c2,                                         \
+        r1, r2, r3,                                     \
+        GT(r4), LT(3,r5), LT(1,r6)
 
 #define HRM_LAYOUT(...) LAYOUT(__VA_ARGS__)
 
@@ -69,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
         XXXXXXX, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, XXXXXXX,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-   HRM( KC_TILD, _______, KC_LBRC, KC_RBRC, KC_MINS,  KC_EQL, _______, _______, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, KC_COLN, KC_DQUO),
+   HRM( CK_TILD, _______, CK_LBRC, KC_RBRC, KC_MINS,  KC_EQL, _______, _______, KC_PLUS, KC_UNDS, KC_LCBR, CK_RCBR, CK_COLN, CK_DQUO),
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, _______, _______, _______, KC_BSLS, _______, _______, _______, _______, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
@@ -212,6 +230,14 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB)),
 };
 
+static bool custom_key_tap(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed && record->tap.count > 0) {
+        tap_code16(keycode);
+        return false;
+    }
+    return true;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case CK_CLEAR_ALL:
@@ -220,6 +246,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             layer_clear();
         }
         return false;
+    CASE_CUSTOM_KEY_TAPS;
+    default:
+        return true;
     }
-    return true;
 }
