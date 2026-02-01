@@ -19,8 +19,6 @@
 #define KC_HEN KC_INT4
 #define KC_MHEN KC_INT5
 
-#define GT GUI_T
-
 enum {
     TD_CTL_CENT,
     TD_SFT_STAB,
@@ -36,25 +34,25 @@ enum custom_keycodes {
     CK_RCBR, CK_COLN, CK_DQUO,
 };
 
-#define CASE_CUSTOM_KEY_TAP(from, to) \
+#define CASE_CK_TAP(from, to) \
     case from: return custom_key_tap(to, record);
 
-#define CASE_CUSTOM_KEY_TAPS                            \
-    /* home row mods left */                            \
-    CASE_CUSTOM_KEY_TAP(LT(1,CK_TILD), KC_TILD);        \
-    /* CASE_CUSTOM_KEY_TAP(LT(3,CK_*), KC_*); */        \
-    CASE_CUSTOM_KEY_TAP(GT(CK_LBRC), KC_LBRC);          \
-    /* home row mods right */                           \
-    CASE_CUSTOM_KEY_TAP(GT(CK_RCBR), KC_RCBR);          \
-    CASE_CUSTOM_KEY_TAP(LT(3,CK_COLN), KC_COLN);        \
-    CASE_CUSTOM_KEY_TAP(LT(1,CK_DQUO), KC_DQUO);
+#define CASE_CUSTOM_KEY_TAPS                    \
+    /* home row mods left */                    \
+    CASE_CK_TAP(LT(1,CK_TILD), KC_TILD);        \
+    /* CASE_CK_TAP(LT(3,CK_*), KC_*); */        \
+    CASE_CK_TAP(GUI_T(CK_LBRC), KC_LBRC);       \
+    /* home row mods right */                   \
+    CASE_CK_TAP(GUI_T(CK_RCBR), KC_RCBR);       \
+    CASE_CK_TAP(LT(3,CK_COLN), KC_COLN);        \
+    CASE_CK_TAP(LT(1,CK_DQUO), KC_DQUO);
 
 #define HRM(l1,l2,l3,l4,l5,l6,c1,c2,r1,r2,r3,r4,r5,r6)  \
-    LT(1,l1), LT(3,l2), GT(l3),                         \
+    LT(1,l1), LT(3,l2), GUI_T(l3),                      \
         l4, l5, l6,                                     \
         c1, c2,                                         \
         r1, r2, r3,                                     \
-        GT(r4), LT(3,r5), LT(1,r6)
+        GUI_T(r4), LT(3,r5), LT(1,r6)
 
 #define HRM_LAYOUT(...) LAYOUT(__VA_ARGS__)
 
