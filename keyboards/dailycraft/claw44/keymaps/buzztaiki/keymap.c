@@ -165,7 +165,26 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    return strong_hold_keycode(keycode);
+    if (strong_hold_keycode(keycode)) {
+        return true;
+    }
+    switch (keycode) {
+    default:
+        return false;
+    }
+}
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case LT(3, KC_A):
+    case LGUI_T(KC_S):
+    case LSFT_T(KC_D):
+    case RSFT_T(KC_K):
+    case RGUI_T(KC_L):
+        return true;
+    default:
+        return false;
+    }
 }
 
 bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
