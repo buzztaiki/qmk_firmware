@@ -29,9 +29,9 @@ enum custom_keycodes {
     CK_CLEAR_ALL = SAFE_RANGE,
 
     // home row mods left
-    CK_TILD, CK_LBRC,
+    CK_TILD,
     // home row mods right
-    CK_RCBR, CK_COLN, CK_DQUO,
+    CK_LCBR, CK_RCBR, CK_COLN, CK_DQUO,
 };
 
 #define CASE_CK_TAP(from, to) \
@@ -40,19 +40,19 @@ enum custom_keycodes {
 #define CASE_CUSTOM_KEY_TAPS                    \
     /* home row mods left */                    \
     CASE_CK_TAP(LT(1,CK_TILD), KC_TILD);        \
-    /* CASE_CK_TAP(LT(3,CK_*), KC_*); */        \
-    CASE_CK_TAP(GUI_T(CK_LBRC), KC_LBRC);       \
     /* home row mods right */                   \
-    CASE_CK_TAP(GUI_T(CK_RCBR), KC_RCBR);       \
+    CASE_CK_TAP(RSFT_T(CK_LCBR), KC_LCBR);      \
+    CASE_CK_TAP(RGUI_T(CK_RCBR), KC_RCBR);      \
     CASE_CK_TAP(LT(3,CK_COLN), KC_COLN);        \
     CASE_CK_TAP(LT(1,CK_DQUO), KC_DQUO);
 
+
 #define HRM(l1,l2,l3,l4,l5,l6,c1,c2,r1,r2,r3,r4,r5,r6)  \
-    LT(1,l1), LT(3,l2), GUI_T(l3),                      \
-        l4, l5, l6,                                     \
+    LT(1,l1), LT(3,l2), LGUI_T(l3),                     \
+        LSFT_T(l4), l5, l6,                             \
         c1, c2,                                         \
-        r1, r2, r3,                                     \
-        GUI_T(r4), LT(3,r5), LT(1,r6)
+        r1, r2, RSFT_T(r3),                             \
+        RGUI_T(r4), LT(3,r5), LT(1,r6)
 
 #define HRM_LAYOUT(...) LAYOUT(__VA_ARGS__)
 
@@ -85,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //,--------+--------+--------+--------+--------+--------.                 ,--------+--------+--------+--------+--------+--------.
         XXXXXXX, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, XXXXXXX,
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
-   HRM( CK_TILD, _______, CK_LBRC, KC_RBRC, KC_MINS,  KC_EQL, _______, _______, KC_PLUS, KC_UNDS, KC_LCBR, CK_RCBR, CK_COLN, CK_DQUO),
+   HRM( CK_TILD, _______, KC_LBRC, KC_RBRC, KC_MINS,  KC_EQL, _______, _______, KC_PLUS, KC_UNDS, CK_LCBR, CK_RCBR, CK_COLN, CK_DQUO),
     //|--------+--------+--------+--------+--------+--------|                 |--------+--------+--------+--------+--------+--------|
         _______, _______, _______, _______, KC_BSLS, _______, _______, _______, _______, KC_PIPE, KC_LABK, KC_RABK, KC_QUES, _______,
     //`--------+--------+--------+--------+--------+--------/                 \--------+--------+--------+--------+--------+--------'
@@ -157,6 +157,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     case LT(2,KC_SPC):
         return 115;
     case LT(3,KC_A):
+    case RSFT_T(KC_K):
         return get_mods() == MOD_BIT(KC_LCTL) ? 500 : TAPPING_TERM;
     default:
         return TAPPING_TERM;
