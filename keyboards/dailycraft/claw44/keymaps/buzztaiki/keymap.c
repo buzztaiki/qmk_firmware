@@ -229,9 +229,13 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_CTL_CTAB] = ACTION_TAP_DANCE_MOD_TAP(KC_LCTL, LCTL(KC_TAB)),
 };
 
-static bool custom_key_tap(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed && record->tap.count > 0) {
-        tap_code16(keycode);
+static bool custom_key_tap(uint16_t real_keycode, keyrecord_t *record) {
+    if (record->tap.count > 0) {
+        if (record->event.pressed) {
+            register_code16(real_keycode);
+        } else {
+            unregister_code16(real_keycode);
+        }
         return false;
     }
     return true;
