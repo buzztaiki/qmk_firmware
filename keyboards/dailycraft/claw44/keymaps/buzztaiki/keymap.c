@@ -131,6 +131,18 @@ static bool thumb_mod_tap(uint16_t keycode) {
     return false;
 }
 
+static bool home_row_mod_tap(uint16_t keycode) {
+    switch (keycode) {
+    case LT(3, KC_A):
+    case LGUI_T(KC_S):
+    case LSFT_T(KC_D):
+    case RSFT_T(KC_K):
+    case RGUI_T(KC_L):
+        return true;
+    default:
+        return false;
+    }
+}
 
 static bool strong_hold_keycode(uint16_t keycode) {
     if (thumb_mod_tap(keycode)) {
@@ -149,20 +161,29 @@ static bool strong_hold_keycode(uint16_t keycode) {
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    if (thumb_mod_tap(keycode)) {
-        return 130;
+    // C-k と C-a は溜めがちなので長めにする
+    if (get_mods() == MOD_BIT(KC_LCTL)) {
+        switch (keycode) {
+        case LT(3,KC_A):
+        case RSFT_T(KC_K):
+            return 500;
+        }
     }
 
     switch (keycode) {
     case CTL_T(KC_ENT):
     case LT(2,KC_SPC):
         return 115;
-    case LT(3,KC_A):
-    case RSFT_T(KC_K):
-        return get_mods() == MOD_BIT(KC_LCTL) ? 500 : TAPPING_TERM;
-    default:
-        return TAPPING_TERM;
     }
+
+    if (thumb_mod_tap(keycode)) {
+        return 130;
+    }
+    if (home_row_mod_tap(keycode)) {
+        return 130;
+    }
+
+    return TAPPING_TERM;
 }
 
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
@@ -170,32 +191,22 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
     case CTL_T(KC_ENT):
     case LT(2,KC_SPC):
         return 115;
-    default:
-        return QUICK_TAP_TERM;
     }
+    return QUICK_TAP_TERM;
 }
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     if (strong_hold_keycode(keycode)) {
         return true;
     }
-    switch (keycode) {
-    default:
-        return false;
-    }
+    return false;
 }
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-    case LT(3, KC_A):
-    case LGUI_T(KC_S):
-    case LSFT_T(KC_D):
-    case RSFT_T(KC_K):
-    case RGUI_T(KC_L):
+    if (home_row_mod_tap(keycode)) {
         return true;
-    default:
-        return false;
     }
+    return false;
 }
 
 bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
@@ -280,7 +291,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         return false;
     CASE_CUSTOM_KEY_TAPS;
-    default:
-        return true;
     }
+    return true;
 }
