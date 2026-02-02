@@ -154,6 +154,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
+    case CTL_T(KC_ENT):
     case LT(2,KC_SPC):
         return 115;
     case LT(3,KC_A):
@@ -161,6 +162,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         return get_mods() == MOD_BIT(KC_LCTL) ? 500 : TAPPING_TERM;
     default:
         return TAPPING_TERM;
+    }
+}
+
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case CTL_T(KC_ENT):
+    case LT(2,KC_SPC):
+        return 115;
+    default:
+        return QUICK_TAP_TERM;
     }
 }
 
