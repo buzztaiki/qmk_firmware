@@ -47,8 +47,9 @@ enum custom_keycodes {
     CASE_CK_TAP(LT(1,CK_DQUO), KC_DQUO);
 
 
+// LT(1,l1), LT(3,l2), LGUI_T(l3),
 #define HRM(l1,l2,l3,l4,l5,l6,c1,c2,r1,r2,r3,r4,r5,r6)  \
-    LT(1,l1), LT(3,l2), LGUI_T(l3),                     \
+    LT(1,l1), l2, LGUI_T(l3),                           \
         LSFT_T(l4), l5, l6,                             \
         c1, c2,                                         \
         r1, r2, RSFT_T(r3),                             \
@@ -131,19 +132,6 @@ static bool thumb_mod_tap(uint16_t keycode) {
     return false;
 }
 
-static bool home_row_mod_tap(uint16_t keycode) {
-    switch (keycode) {
-    case LT(3, KC_A):
-    case LGUI_T(KC_S):
-    case LSFT_T(KC_D):
-    case RSFT_T(KC_K):
-    case RGUI_T(KC_L):
-        return true;
-    default:
-        return false;
-    }
-}
-
 static bool strong_hold_keycode(uint16_t keycode) {
     if (thumb_mod_tap(keycode)) {
         return true;
@@ -161,10 +149,9 @@ static bool strong_hold_keycode(uint16_t keycode) {
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // C-k と C-a は溜めがちなので長めにする
+    // C-k は溜めがちなので長めにする
     if (get_mods() == MOD_BIT(KC_LCTL)) {
         switch (keycode) {
-        case LT(3,KC_A):
         case RSFT_T(KC_K):
             return 500;
         }
@@ -174,12 +161,14 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     case CTL_T(KC_ENT):
     case LT(2,KC_SPC):
         return 115;
+    case LGUI_T(KC_S):
+    case LSFT_T(KC_D):
+    case RSFT_T(KC_K):
+    case RGUI_T(KC_L):
+        return 130;
     }
 
     if (thumb_mod_tap(keycode)) {
-        return 130;
-    }
-    if (home_row_mod_tap(keycode)) {
         return 130;
     }
 
@@ -203,9 +192,14 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    if (home_row_mod_tap(keycode)) {
+    switch(keycode) {
+    case LGUI_T(KC_S):
+    case LSFT_T(KC_D):
+    case RSFT_T(KC_K):
+    case RGUI_T(KC_L):
         return true;
     }
+
     return false;
 }
 
