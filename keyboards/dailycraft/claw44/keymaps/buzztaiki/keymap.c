@@ -288,3 +288,56 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
+
+
+//
+// COMBOS
+//
+
+enum combos {
+    COMBO_SHI,
+    COMBO_SHO,
+};
+
+const uint16_t PROGMEM combo_shi[] = {LGUI_T(KC_S), KC_H, KC_I, COMBO_END};
+const uint16_t PROGMEM combo_sho[] = {LGUI_T(KC_S), KC_H, KC_O, COMBO_END};
+
+combo_t key_combos[] = {
+    [COMBO_SHI] = COMBO_ACTION(combo_shi),
+    [COMBO_SHO] = COMBO_ACTION(combo_sho),
+};
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+    if (!pressed) {
+        return;
+    }
+
+    switch(combo_index) {
+    case COMBO_SHI:
+        SEND_STRING("shi");
+        break;
+    case COMBO_SHO:
+        SEND_STRING("sho");
+        break;
+    }
+}
+
+bool get_combo_must_press_in_order(uint16_t combo_index, combo_t *combo) {
+    switch (combo_index) {
+    case COMBO_SHI:
+    case COMBO_SHO:
+        return true;
+    default:
+        return false;
+    }
+}
+
+uint16_t get_combo_term(uint16_t combo_index, combo_t *combo) {
+    switch (combo_index) {
+    case COMBO_SHI:
+    case COMBO_SHO:
+        return 100;
+    default:
+        return 50;
+    }
+}

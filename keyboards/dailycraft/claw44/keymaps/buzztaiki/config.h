@@ -11,3 +11,7 @@
 
 #define TAPPING_TERM 175
 #define QUICK_TAP_TERM TAPPING_TERM
+
+// https://docs.qmk.fm/features/combo
+#define COMBO_MUST_PRESS_IN_ORDER_PER_COMBO
+#define COMBO_TERM_PER_COMBO
